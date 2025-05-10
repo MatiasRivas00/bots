@@ -49,7 +49,7 @@ class BaseBot(ABC):
     from app.core.config import NGROK_URL
 
     if hasattr(self, 'app'):
-      url = f"{NGROK_URL}/{self.name}"
+      url = f"{NGROK_URL}/webhook/{self.name}"
       await self.app.bot.set_webhook(
         url=url,
         allowed_updates=Update.ALL_TYPES
