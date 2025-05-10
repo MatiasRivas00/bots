@@ -47,10 +47,14 @@ class BaseBot(ABC):
     from app.core.config import NGROK_URL
 
     if hasattr(self, 'app'):
+      url = f"{NGROK_URL}/{self.name}"
       await self.app.bot.set_webhook(
-        url=f"{NGROK_URL}/{self.name}",
+        url=url,
         allowed_updates=Update.ALL_TYPES
       )
+      print(f"Webhook establecido en {url}")
+      webhook_info = await self.app.bot.get_webhook_info()
+      print(f"Confirmación Webhook: {webhook_info}")
   
   async def shutdown(self):
     if hasattr(self, 'app'):
