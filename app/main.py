@@ -5,11 +5,6 @@ from app.core.config import BOTS, PORT
 from app.webhooks.router import router as webhook_router
 from app.core.logger import logger
 
-
-app = FastAPI(title="Multi-Bot FastAPI Service", version="1.0.0")
-
-app.include_router(webhook_router)
-
 async def on_startup():
     logger.info("Iniciando aplicación FastAPI...")
     for bot in BOTS:
@@ -29,6 +24,11 @@ async def lifespan(app: FastAPI):
     await on_startup()
     yield
     await on_shutdown()
+
+app = FastAPI(title="Multi-Bot FastAPI Service", version="1.0.0", lifespan=lifespan)
+
+app.include_router(webhook_router)
+
 
 @app.get("/")
 async def root():
