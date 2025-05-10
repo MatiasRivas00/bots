@@ -59,7 +59,7 @@ class BaseBot(ABC):
       logger.info(f"Confirmación Webhook: {webhook_info}")
   
   async def shutdown(self):
-    if hasattr(self, 'app'):
+    if hasattr(self, 'app') and self.app:
       logger.info(f"stopping bot {self.name}")
       await self.app.stop()
       try:
