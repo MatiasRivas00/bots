@@ -12,7 +12,8 @@ app.include_router(webhook_router)
 async def on_startup():
     print("Iniciando aplicación FastAPI...")
     for bot in BOTS:
-        await bot.build()
+        bot.build()
+        await bot.init()
         await bot.set_webhook()
 
 async def on_shutdown():
