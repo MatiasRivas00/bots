@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from app.core.config import BOTS, PORT
 from app.webhooks.router import router as webhook_router
+from app.core.logger import logger
 
 
 app = FastAPI(title="Multi-Bot FastAPI Service", version="1.0.0")
@@ -10,18 +11,18 @@ app = FastAPI(title="Multi-Bot FastAPI Service", version="1.0.0")
 app.include_router(webhook_router)
 
 async def on_startup():
-    print("Iniciando aplicación FastAPI...")
+    logger.info("Iniciando aplicación FastAPI...")
     for bot in BOTS:
         bot.build()
         await bot.init()
         await bot.set_webhook()
 
 async def on_shutdown():
-    print("Apagando aplicación FastAPI...")
+    logger.info("Apagando aplicación FastAPI...")
     for bot in BOTS:
         await bot.shutdown()
 
-    print("Aplicación FastAPI apagada.")
+    logger.info("Aplicación FastAPI apagada.")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

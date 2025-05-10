@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from telegram.ext import Application
 from telegram import Update
 
+from .logger import logger
+
 class BaseBot(ABC):
   _instances = {}
 
@@ -52,9 +54,9 @@ class BaseBot(ABC):
         url=url,
         allowed_updates=Update.ALL_TYPES
       )
-      print(f"Webhook establecido en {url}")
+      logger.info(f"Webhook establecido en {url}")
       webhook_info = await self.app.bot.get_webhook_info()
-      print(f"Confirmación Webhook: {webhook_info}")
+      logger.info(f"Confirmación Webhook: {webhook_info}")
   
   async def shutdown(self):
     if hasattr(self, 'app'):
