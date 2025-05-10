@@ -41,9 +41,9 @@ class BaseBot(ABC):
     self._built = True
     return self
   
-  def init(self):
+  async def init(self):
     if hasattr(self, '_built') and self._built:
-      self.app.initialize()
+      return await self.app.initialize()
 
   async def set_webhook(self):
     from app.core.config import NGROK_URL
