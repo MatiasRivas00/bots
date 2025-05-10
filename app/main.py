@@ -11,6 +11,7 @@ async def on_startup():
         bot.build()
         await bot.init()
         await bot.set_webhook()
+        await bot.start()
 
 async def on_shutdown():
     logger.info("Apagando aplicación FastAPI...")
