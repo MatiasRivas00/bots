@@ -60,18 +60,23 @@ class BaseBot(ABC):
   
   async def shutdown(self):
     if hasattr(self, 'app') and self.app:
-      logger.info(f"stopping bot {self.name}")
-      await self.app.stop()
+      try:
+        logger.info(f"stopping bot {self.name}")
+        await self.app.stop()
+      except Exception as e:
+        logger.error(f"stopping bot {self.name} failed, reason {e}", exc_info=True)
+
       try:
         logger.info(f"deleting webhook from bot {self.name}")
         await self.app.bot.delete_webhook()
-      except:
-        logger.error(f"delete webhook from bot {self.name} failed")
+      except Exception as e:
+        logger.error(f"delete webhook from bot {self.name} failed, reason {e}", exc_info=True)
+      
       try:
         logger.info(f"shutdown bot {self.name}")
         await self.app.shutdown()
-      except:
-        logger.error(f"shutdown bot {self.name} failed")
+      except Exception as e:
+        logger.error(f"shutdown bot {self.name} failed, reason {e}", exc_info=True)
 
   async def process_update(self, data):
     if not hasattr(self, 'app') or self.app is None:
