@@ -1,19 +1,9 @@
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
 from app.bot_red.bot import BotRed
-
-BOT_RED_TOKEN = os.getenv("BOT_RED_TOKEN")
-RED_TOKEN_URL = os.getenv("RED_TOKEN_URL")
-RED_PREDICTION_URL = os.getenv("RED_PREDICTION_URL")
-
-BOT_BUDGET_TOKEN = os.getenv("BOT_BUDGET_TOKEN")
-
-PORT = int(os.getenv("PORT"))
-NGROK_URL = os.getenv("NGROK_URL")
+from app.core.constants import BOT_RED_TOKEN
+from app.db.mongo import Mongo
 
 BOTS = [
   BotRed(name='red', token=BOT_RED_TOKEN)
 ]
+
+MONGO_CLIENT = Mongo().connect()

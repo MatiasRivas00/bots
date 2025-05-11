@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import uvicorn
-from app.core.config import BOTS, PORT
+from app.core.config import BOTS
+from app.core.constants import PORT
 from app.webhooks.router import router as webhook_router
 from app.core.logger import logger
 
