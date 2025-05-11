@@ -7,3 +7,4 @@ BOTS = [
 ]
 
 MONGO_CLIENT = Mongo().connect()
+MONGO_DB = MONGO_CLIENT['bots']
