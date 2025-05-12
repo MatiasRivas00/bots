@@ -1,11 +1,12 @@
 from typing import Type, List, Optional
+from pymongo.database import Database
+from pymongo.collection import Collection
 
-from app.core.config import MONGO_DB
 from app.schemas.mongo import BaseSchema
 
 class MongoModel:
-  def __init__(self, name: str, schema: Type[BaseSchema]):
-    self.collection = MONGO_DB[name]
+  def __init__(self, db: Database, collection_name: str, schema: Type[BaseSchema]):
+    self.collection: Collection = db[collection_name]
     self.schema = schema
 
   def find(self, query: dict = {}) -> List[BaseSchema]:
