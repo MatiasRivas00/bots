@@ -22,7 +22,7 @@ class PythonObjectId(ObjectId):
   
 class BaseSchema(BaseModel):
   id: Optional[PythonObjectId] = Field(default_factory=PythonObjectId, alias="_id")
-  created_at: Optional[datetime] = Field(default_factory=datetime.now(timezone.utc))
+  created_at: Optional[datetime] = Field(default_factory= lambda: datetime.now(timezone.utc))
 
   class Config:
     validate_by_name = True

@@ -37,9 +37,3 @@ class LLMTransaction(BaseModel):
 
     timestamp: datetime
     message_text: str
-
-    @field_validator("tag_ids")
-    def validate_tag_ids_length(cls, v):
-        if len(v) > 5:
-            raise ValueError("Cannot add more than 5 tags to one Transaction")
-        return v

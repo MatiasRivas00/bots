@@ -1,7 +1,7 @@
 from app.core.constants import MONGO_URI
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from core.logger import logger
+from app.core.logger import logger
 
 class Mongo:
   _client = None
