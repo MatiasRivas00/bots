@@ -1,11 +1,8 @@
 import pytest
 from datetime import datetime, UTC
-from bson import ObjectId
 from app.schemas.mongo import PythonObjectId
 
-from app.models.mongo.money.category import Category
-from app.models.mongo.money.tag import Tag
-from app.models.mongo.money.transaction import Transaction
+from app.models.mongo.money import Category, Tag, Transaction
 
 @pytest.fixture
 def user_id():
