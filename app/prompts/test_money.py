@@ -1,4 +1,4 @@
-from app.prompts.money import get_category_from_message, get_tag_from_message
+from app.prompts.money import get_llm_category_from_message, get_llm_tags_from_message, get_llm_transaction_from_message
 from app.models.mongo.money import Category, Tag
 from app.models.mongo.user import User
 from app.models.mongo.money_populate import populate_categories_for_user
@@ -13,10 +13,7 @@ print(user)
 def test_prompts():
     # Test messages - add more examples as needed
     test_messages = [
-        "Almuerzo con amigos en el centro",
-        "Compra de supermercado para la semana",
-        "Pago de Netflix mensual",
-        "Regalo de cumpleaños para mamá"
+        "Gasté 3 lucas en almuerzo con amigos en el centro, pagué en efectivo",
     ]
     
     print("\n=== Testing Category and Tag Extraction ===\n")
@@ -27,14 +24,17 @@ def test_prompts():
         
         try:
             # Test category extraction
-            category = get_category_from_message(message, user.id)
-            print(f"Category: {category.name} (ID: {category.id})")
+            category = get_llm_category_from_message(message, user.id)
+            print(f"Category: {category.name}")
             
             # Test tag extraction
-            tags = get_tag_from_message(message, user.id)
+            tags = get_llm_tags_from_message(message, user.id)
             print("\nTags:")
             for tag in tags:
-                print(f"- {tag.name} (ID: {tag.id})")
+                print(f"- {tag.name}")
+
+            transaction = get_llm_transaction_from_message(message)
+            print(f"Transaction: {transaction.amount} {transaction.currency} {transaction.type} {transaction.description} {transaction.payment_method} {transaction.timestamp} {transaction.message_text}")
         
         except Exception as e:
             print(f"Error processing message: {str(e)}")

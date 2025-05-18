@@ -12,7 +12,7 @@ from app.core.constants import GEMINI_TOKEN
 
 client = genai.Client(api_key=GEMINI_TOKEN)
 
-def get_category_from_message(message: str, user_id: PythonObjectId) -> BaseSchema:
+def get_llm_category_from_message(message: str, user_id: PythonObjectId) -> LLMCategory:
     """
     Get the category from the message
     """
@@ -42,10 +42,9 @@ def get_category_from_message(message: str, user_id: PythonObjectId) -> BaseSche
         }
     )
 
-    category_data = response.parsed
-    return Category.find_one({"name": category_data.name}) or Category.find_one({"name": "Otro"})
+    return response.parsed
 
-def get_tag_from_message(message: str, user_id: PythonObjectId) -> List[BaseSchema]:
+def get_llm_tags_from_message(message: str, user_id: PythonObjectId) -> List[LLMTag]:
     existing_tags = Tag.find({"is_active": True, "user_id": user_id})
     existing_tags_length = len(existing_tags)
 
@@ -100,28 +99,40 @@ def get_tag_from_message(message: str, user_id: PythonObjectId) -> List[BaseSche
             "response_schema": list[LLMTag]
         }
     )
-    
-    tags_data = response.parsed
-    tags: List[BaseSchema] = []
 
-    for llm_tag in tags_data:
-        tag = Tag.find_one({"name": llm_tag.name, "user_id": user_id})
-        if tag is not None and tag.is_active:
-            tags.append(tag)
-        elif tag is not None and not tag.is_active:
-            Tag.update({"name": llm_tag.name}, {"is_active": True})
-            tag.is_active = True
-            tags.append(tag)
-        else:
-            tag = Tag.create({"name": llm_tag.name, "is_active": True, "user_id": user_id})
-            print(f"Tag created: {tag.name}")
-            tags.append(tag)
-    return tags
+    return response.parsed
 
-def get_transaction_from_message(message: str) -> str:
+def get_llm_transaction_from_message(message: str) -> str:
     """
     Get the transaction from the message
     """
-    return "transaction"
+    prompt = f"""
+    Obtén la transacción que describe de mejor manera la transacción del siguiente mensaje: {message}
+
+    Reglas para la transacción:
+    1. La transacción debe tener los siguientes campos: amount, currency, type, description, payment_method, timestamp, message_text
+    2. El amount debe ser un número positivo o 0 si no se puede determinar.
+    3. El currency debe ser CLP por defecto, a no ser que se especifique otra moneda en el mensaje.
+    4. El type debe ser income o expense.
+    5. El description debe ser una descripción de la transacción, no debe ser el mensaje original, y no debe superar los 100 caracteres.
+    6. El payment_method debe ser alguno de los que se muestra en las categorías existentes, si no se puede determinar, usar debit_card. (cash, debit_card, credit_card, transfer, other son los tipos disponibles)
+    7. El timestamp debe ser la fecha y hora actual.
+    8. El message_text debe ser el mensaje original.
+
+    Los mensajes pueden usar jergas chilenas, estas son las más comunes:
+     - luca o lucas: una luca son 1000 pesos chilenos, y tres lucas son 3000 pesos chilenos por ejemplo.
+     - cabros o los k: se refiere a un grupo de amigos.
+     - si digo 3k o 4k u otro numero que puede ser interpretado como valor monetario, 3k y 4k se refiere a 3000, 4000 pesos chilenos por ejemplo.
+    """
+    response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=prompt,
+    config={
+        "response_mime_type": "application/json",
+        "response_schema": LLMTransaction
+    }
+    )
+
+    return response.parsed
 
 
