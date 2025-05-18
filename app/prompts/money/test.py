@@ -1,7 +1,7 @@
 from app.prompts.money import get_llm_category_from_message, get_llm_tags_from_message, get_llm_transaction_from_message
 from app.models.mongo.money import Category, Tag
 from app.models.mongo.user import User
-from app.models.mongo.money_populate import populate_categories_for_user
+from app.models.mongo.money.populate import populate_categories_for_user
 
 user = User.find_one({"telegram_id": 1234567890})
 categories = Category.find({"user_id": user.id})
