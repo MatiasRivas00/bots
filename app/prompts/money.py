@@ -1,12 +1,11 @@
 from google import genai
 from typing import List
+from datetime import datetime
 
 from app.schemas.mongo import PythonObjectId
 
-from app.models.mongo.money import Category, Tag, Transaction
+from app.models.mongo.money import Category, Tag
 from app.schemas.money import LLMCategory, LLMTag, LLMTransaction
-
-from app.schemas.money import BaseSchema
 
 from app.core.constants import GEMINI_TOKEN
 
@@ -50,8 +49,8 @@ def get_llm_tags_from_message(message: str, user_id: PythonObjectId) -> List[LLM
 
     categories = Category.find({"user_id": user_id})
 
-    formatted_categories = "\n".join([
-        f"- {category.name}"
+    formatted_categories = ", ".join([
+        f"{category.name.lower()}"
         for category in categories
     ])
 
@@ -81,8 +80,7 @@ def get_llm_tags_from_message(message: str, user_id: PythonObjectId) -> List[LLM
     Las etiquetas existentes son:
     {formatted_tags}
 
-    Las categorías existentes son:
-    {formatted_categories}
+    no puedes elegir ninguna de las categorías existentes como etiqueta ({formatted_categories}), tampoco pueden ser sinónimos de las categorías, ni contener palabras de las categorías.
 
     El máximo número de etiquetas permitidas es 30 y actualmente hay {existing_tags_length}.
     Debes considerar este máximo, ya que si eliges nuevas etiquetas, estas serán parte de las existentes y podrían hacer que se supere el límite de 30.
@@ -116,7 +114,7 @@ def get_llm_transaction_from_message(message: str) -> str:
     4. El type debe ser income o expense.
     5. El description debe ser una descripción de la transacción, no debe ser el mensaje original, y no debe superar los 100 caracteres.
     6. El payment_method debe ser alguno de los que se muestra en las categorías existentes, si no se puede determinar, usar debit_card. (cash, debit_card, credit_card, transfer, other son los tipos disponibles)
-    7. El timestamp debe ser la fecha y hora actual.
+    7. El timestamp debe ser la fecha y hora actual en UTC. la fecha y hora actual es {datetime.now().strftime('%Y-%m-%d %H:%M')} en Chile, debes pasarlo a UTC.
     8. El message_text debe ser el mensaje original.
 
     Los mensajes pueden usar jergas chilenas, estas son las más comunes:

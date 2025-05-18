@@ -1,6 +1,4 @@
-import threading
-import asyncio
-from app.core.config import BOTS
+from app.core.bots import BOTS
 
-BOTS[0].build()
-BOTS[0].run_polling()
+BOTS[1].build()
+BOTS[1].run_polling()
