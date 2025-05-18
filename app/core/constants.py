@@ -15,3 +15,5 @@ NGROK_URL = os.getenv("NGROK_URL")
 MONGO_URI = os.getenv("MONGO_URI")
 
 ENV = os.getenv("ENV")
+
+GEMINI_TOKEN = os.getenv("GEMINI_TOKEN")

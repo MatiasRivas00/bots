@@ -53,8 +53,8 @@ class LLMTag(BaseModel):
 class Category(BaseSchema):
     user_id: PythonObjectId
     name: str
-    parent_id: Optional[PythonObjectId] = None  # Si es None, es una categoría principal
-
+    parent_id: Optional[PythonObjectId] = None
+    description: Optional[str] = None
 
 class LLMCategory(BaseModel):
     name: str

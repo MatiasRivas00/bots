@@ -88,13 +88,13 @@ Sirve para agrupar gastos o ingresos que pertenecen a una iniciativa de mediano/
 - Evaluar inversiones personales o de ocio.
 
 **Ejemplos:**
-- `#viaje_a_Perú`
+- `#viaje`
 - `#mudanza`
 - `#nuevo_departamento`
-- `#bodas_2025`
+- `#bodas`
 
 > *Ejemplo de uso:*  
-> "Reservé el hotel para nuestro viaje a Perú" → `#viaje_a_Perú`
+> "Reservé el hotel para nuestro viaje a Perú" → `#viaje`
 
 **Consejo:**  
 Mantén consistencia en el nombre de los proyectos. Se recomienda usar formato snake_case (`#viaje_norte`, no `#Viaje Norte`) para facilitar el análisis programático.
