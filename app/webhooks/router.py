@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from app.core.config import BOTS
+from app.core.bots import BOTS
 
 router = APIRouter(prefix='/webhook')
 

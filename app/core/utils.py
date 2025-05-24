@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from telegram.ext import Application
 from telegram import Update
 
+from app.core.constants import NGROK_URL
 from .logger import logger
 
 class BaseBot(ABC):
@@ -54,8 +55,6 @@ class BaseBot(ABC):
       await self.app.initialize()
 
   async def set_webhook(self):
-    from app.core.config import NGROK_URL
-
     if hasattr(self, 'app'):
       url = f"{NGROK_URL}/webhook/{self.name}"
       await self.app.bot.set_webhook(

@@ -3,8 +3,10 @@ import re
 import base64
 from bs4 import BeautifulSoup
 
+from app.core.constants import RED_TOKEN_URL, RED_PREDICTION_URL
+
+
 def get_token():
-  from app.core.config import RED_TOKEN_URL
   response = requests.get(RED_TOKEN_URL)
   soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -20,6 +22,5 @@ def get_token():
   return None
 
 def get_prediction(jwt, codsimt):
-  from app.core.config import RED_PREDICTION_URL
   response = requests.get(f"{RED_PREDICTION_URL}?t={jwt}&codsimt={codsimt}&codser=")
   return response.json()
