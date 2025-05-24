@@ -8,6 +8,9 @@ from app.schemas.money import Tag as TagSchema
 
 from app.models.mongo.money import Transaction, Category, Tag
 
+from app.controllers.utils import get_last_monday
+from datetime import datetime
+
 def get_or_create_tags_from_message(message: str, user_id: PythonObjectId) -> List[TagSchema]:
     llm_tags = get_llm_tags_from_message(message, user_id)
     tags: List[TagSchema] = []
@@ -44,4 +47,44 @@ def create_transaction_from_message(message: str, user_id: PythonObjectId) -> Tr
 
     return transaction
 
+def week_summary(user_id: PythonObjectId) -> dict:
+    last_monday = get_last_monday()
+    transactions_by_category = {"income": {}, "expense": {}}
+    categories = Category.find({"user_id": user_id})
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": last_monday}, "category_id": category.id, "type": "expense"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["expense"][category.name] = total_amount
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": last_monday}, "category_id": category.id, "type": "income"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["income"][category.name] = total_amount
+    return transactions_by_category
 
+def month_summary(user_id: PythonObjectId) -> dict:
+    month_first_day = datetime.now().replace(day=1)
+    transactions_by_category = {"income": {}, "expense": {}}
+    categories = Category.find({"user_id": user_id})
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": month_first_day}, "category_id": category.id, "type": "expense"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["expense"][category.name] = total_amount
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": month_first_day}, "category_id": category.id, "type": "income"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["income"][category.name] = total_amount
+    return transactions_by_category
+
+def year_summary(user_id: PythonObjectId) -> dict:
+    year_first_day = datetime.now().replace(day=1, month=1)
+    transactions_by_category = {"income": {}, "expense": {}}
+    categories = Category.find({"user_id": user_id})
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": year_first_day}, "category_id": category.id, "type": "expense"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["expense"][category.name] = total_amount
+    for category in categories:
+        transactions = Transaction.find({"user_id": user_id, "timestamp": {"$gte": year_first_day}, "category_id": category.id, "type": "income"})
+        total_amount = sum([transaction.amount for transaction in transactions])
+        transactions_by_category["income"][category.name] = total_amount
+    return transactions_by_category
