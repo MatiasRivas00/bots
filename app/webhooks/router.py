@@ -3,14 +3,16 @@ from app.core.bots import BOTS
 
 router = APIRouter(prefix='/webhook')
 
-for bot in BOTS:
-    async def webhook_handler(request: Request):        
+def create_webhook_handler(bot):
+    async def webhook_handler(request: Request):
         data = await request.json()
         await bot.process_update(data)
         return {"status": "ok"}
-    
+    return webhook_handler
+
+for bot in BOTS:
     router.add_api_route(
         f"/{bot.name}",
-        webhook_handler,
+        create_webhook_handler(bot),
         methods=["POST"]
     )
