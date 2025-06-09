@@ -7,14 +7,9 @@ class Transaction(BaseSchema):
     user_id: PythonObjectId
     amount: float
     currency: str = "CLP"
-
-    type: Literal["expense", "income"]
     description: str
-
     category_id: PythonObjectId
-
     payment_method: Literal["cash", "debit_card", "credit_card","transfer", "other"] = "debit_card"
-
     tag_ids: List[PythonObjectId] = Field(default_factory=list)  # Hasta 5 tags por transacción
     timestamp: datetime
     message_text: str
@@ -29,12 +24,8 @@ class Transaction(BaseSchema):
 class LLMTransaction(BaseModel):
     amount: float
     currency: str = "CLP"
-
-    type: Literal["expense", "income"]
     description: str
-
     payment_method: Literal["cash", "debit_card", "credit_card","transfer", "other"] = "debit_card"
-
     timestamp: datetime
     message_text: str
 

@@ -217,7 +217,6 @@ def test_transaction_validation(user_id):
             "user_id": user_id,
             "amount": 100.0,
             "currency": "CLP",
-            "type": "expense",
             "description": "Test Transaction",
             "category_id": category.id,
             "payment_method": "debit_card",
@@ -252,7 +251,6 @@ def test_transaction_filters(user_id):
             "user_id": user_id,
             "amount": 100.0,
             "currency": "CLP",
-            "type": "expense",
             "description": "Transaction 1",
             "category_id": category1.id,
             "payment_method": "cash",
@@ -264,7 +262,6 @@ def test_transaction_filters(user_id):
             "user_id": user_id,
             "amount": 200.0,
             "currency": "CLP",
-            "type": "income",
             "description": "Transaction 2",
             "category_id": category2.id,
             "payment_method": "credit_card",
@@ -291,14 +288,6 @@ def test_transaction_filters(user_id):
     }))
     assert len(tag2_transactions) == 1
     assert tag2_transactions[0].amount == 200.0
-
-    # Test filtering by type
-    income_transactions = list(Transaction.find({
-        "user_id": user_id,
-        "type": "income"
-    }))
-    assert len(income_transactions) == 1
-    assert income_transactions[0].amount == 200.0
 
     # Test filtering by payment method
     cash_transactions = list(Transaction.find({

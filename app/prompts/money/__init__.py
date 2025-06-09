@@ -101,6 +101,7 @@ def get_llm_tags_from_message(message: str, user_id: PythonObjectId) -> List[LLM
     return response.parsed
 
 def get_llm_transaction_from_message(message: str) -> str:
+    DAYS = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
     """
     Get the transaction from the message
     """
@@ -108,14 +109,13 @@ def get_llm_transaction_from_message(message: str) -> str:
     Obtén la transacción que describe de mejor manera la transacción del siguiente mensaje: {message}
 
     Reglas para la transacción:
-    1. La transacción debe tener los siguientes campos: amount, currency, type, description, payment_method, timestamp, message_text
-    2. El amount debe ser un número positivo o 0 si no se puede determinar.
-    3. El currency debe ser CLP por defecto, a no ser que se especifique otra moneda en el mensaje.
-    4. El type debe ser income o expense.
-    5. El description debe ser una descripción de la transacción, no debe ser el mensaje original, y no debe superar los 100 caracteres.
-    6. El payment_method debe ser alguno de los que se muestra en las categorías existentes, si no se puede determinar, usar debit_card. (cash, debit_card, credit_card, transfer, other son los tipos disponibles)
-    7. El timestamp debe ser la fecha y hora actual en UTC. la fecha y hora actual es {datetime.now().strftime('%Y-%m-%d %H:%M')} en Chile, debes pasarlo a UTC.
-    8. El message_text debe ser el mensaje original.
+    - La transacción debe tener los siguientes campos: amount, currency, description, payment_method, timestamp, message_text
+    - El amount debe ser un número positivo o 0 si no se puede determinar.
+    - El currency debe ser CLP por defecto, a no ser que se especifique otra moneda en el mensaje.
+    - El description debe ser una descripción de la transacción, no debe ser el mensaje original, y no debe superar los 100 caracteres.
+    - El payment_method debe ser alguno de los que se muestra en las categorías existentes, si no se puede determinar, usar debit_card. (cash, debit_card, credit_card, transfer, other son los tipos disponibles)
+    - El timestamp debe ser la fecha y hora actual en UTC. La fecha y hora actual en Chile es {datetime.now().strftime('%Y-%m-%d %H:%M')} y el día de hoy es {DAYS[datetime.now().weekday()]}. Si el mensaje menciona referencias temporales como "hoy", "ayer" o un día específico (por ejemplo, "el lunes"), utiliza la fecha y hora actual como referencia para determinar el día y la hora de la transacción, y conviértelo a UTC.
+    - El message_text debe ser el mensaje original.
 
     Los mensajes pueden usar jergas chilenas, estas son las más comunes:
      - luca o lucas: una luca son 1000 pesos chilenos, y tres lucas son 3000 pesos chilenos por ejemplo.
