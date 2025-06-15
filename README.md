@@ -1,6 +1,6 @@
 # 💰 Financial Tracker - Esquemas y Clasificación de Transacciones
 
-Este proyecto permite registrar de forma estructurada **gastos, ingresos y aportes financieros** a partir de mensajes simples (como *"Gasté 2000 en una salida con amigos"*), usando esquemas Pydantic que modelan la información para permitir análisis financieros claros y útiles.
+Este proyecto permite registrar de forma estructurada **gastos** a partir de mensajes simples (como *"Gasté 2000 en una salida con amigos"*), usando esquemas Pydantic que modelan la información para permitir análisis financieros claros y útiles.
 
 ## 📦 Esquemas principales
 
@@ -29,8 +29,6 @@ Cada transacción debe pertenecer a una de las siguientes **12 categorías padre
 | **Familia y relaciones**   | Regalos, celebraciones, mascotas, gastos relacionados con hijos |
 | **Tecnología y suscripciones** | Celular, internet, apps, gadgets, Netflix, Spotify |
 | **Finanzas y deudas**      | Créditos, pagos de intereses, comisiones bancarias, seguros |
-| **Ahorro e inversión**     | Aportes a cuentas de ahorro, fondos mutuos, compra de acciones |
-| **Ingresos**               | Sueldos, bonos, reembolsos, ventas, ingresos extra |
 
 ---
 
@@ -43,7 +41,7 @@ Los **tags** funcionan como anotaciones adicionales que capturan el contexto **p
 ### 1. 👥 Tags de Persona  
 **¿Con quién ocurrió la transacción?**
 
-Estos tags ayudan a entender los vínculos sociales o roles con los que se asocian ciertos gastos o ingresos. Son especialmente útiles para:
+Estos tags ayudan a entender los vínculos sociales o roles con los que se asocian ciertos gastos. Son especialmente útiles para:
 
 - Analizar cuánto gastas en salidas con determinadas personas.
 - Identificar patrones de gasto en actividades grupales o familiares.
@@ -82,10 +80,9 @@ Considera estandarizar eventos comunes para mantener coherencia. Evita variantes
 ### 3. 🎯 Tags de Proyecto o Propósito  
 **¿Forma parte de un objetivo o esfuerzo mayor?**
 
-Sirve para agrupar gastos o ingresos que pertenecen a una iniciativa de mediano/largo plazo. Muy útil para:
+Sirve para agrupar gastos que pertenecen a una iniciativa de mediano/largo plazo. Muy útil para:
 
 - Saber cuánto has gastado en un viaje, mudanza, boda, renovación, etc.
-- Evaluar inversiones personales o de ocio.
 
 **Ejemplos:**
 - `#viaje`
