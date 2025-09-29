@@ -2,6 +2,18 @@
 
 Este proyecto permite registrar de forma estructurada **gastos** a partir de mensajes simples (como *"Gasté 2000 en una salida con amigos"*), usando esquemas Pydantic que modelan la información para permitir análisis financieros claros y útiles.
 
+# 🚀 Instalación y ejecución
+
+## Instalación de dependencias
+```bash
+uv sync
+```
+
+## Ejecutar el proyecto
+```bash
+uv run poe start
+```
+
 ## 📦 Esquemas principales
 
 - **User**: Representa al usuario del sistema (incluye autenticación básica).
